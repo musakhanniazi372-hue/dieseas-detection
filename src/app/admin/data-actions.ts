@@ -5,21 +5,15 @@ import Signup from "@/models/signup.model";
 import Scan from "@/models/scan.model";
 import { revalidatePath } from "next/cache";
 import { requireAdmin } from "./actions";
-
-async function connectDB() {
-    if (mongoose.connection.readyState >= 1) {
-        return;
-    }
-    // Using Next.js 15 connection pattern
-    await mongoose.connect(`${process.env.MONGODB_URI}/test`); // The default DB
-}
+import dbConnection from "@/connection/dbconnection";
 
 export async function getUsers() {
     await requireAdmin();
     try {
-        await connectDB();
-        const users = await Signup.find({}).sort({ _id: -1 }).select("-password").lean();
+        await dbConnection();
+        const users = await Signup.find();
         // Convert ObjectId to string for client components
+        console.log("Userss: ", users)
         return { success: true, data: JSON.parse(JSON.stringify(users)) };
     } catch (error) {
         console.error("Failed to fetch users:", error);
@@ -30,7 +24,7 @@ export async function getUsers() {
 export async function deleteUser(id: string) {
     await requireAdmin();
     try {
-        await connectDB();
+        await dbConnection();
         await Signup.findByIdAndDelete(id);
         // Also optionally delete their scans to maintain referential integrity
         await Scan.deleteMany({ userId: id });
@@ -45,7 +39,7 @@ export async function deleteUser(id: string) {
 export async function getPredictions() {
     await requireAdmin();
     try {
-        await connectDB();
+        await dbConnection();
         // Populate user email if we want to show who made the prediction
         const predictions = await Scan.find({})
             .sort({ createdAt: -1 })
@@ -61,7 +55,7 @@ export async function getPredictions() {
 export async function deletePrediction(id: string) {
     await requireAdmin();
     try {
-        await connectDB();
+        await dbConnection();
         await Scan.findByIdAndDelete(id);
         revalidatePath("/admin/predictions");
         return { success: true };
