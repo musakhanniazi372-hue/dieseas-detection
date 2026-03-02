@@ -75,6 +75,7 @@ export default function DashboardSidebar({
     const [isLoadingHistory, setIsLoadingHistory] = useState(true);
     const [downloadingScanData, setDownloadingScanData] = useState<any>(null);
     const [isGeneratingMap, setIsGeneratingMap] = useState<Record<string, boolean>>({});
+    const [actualUserName, setActualUserName] = useState<string>(userName);
 
     useEffect(() => {
         const fetchHistory = async () => {
@@ -90,7 +91,20 @@ export default function DashboardSidebar({
                 setIsLoadingHistory(false);
             }
         };
+
+        const fetchProfile = async () => {
+            try {
+                const res = await axios.get(`/api/user/profile?t=${Date.now()}`);
+                if (res.data.success && res.data.user?.email) {
+                    setActualUserName(res.data.user.email);
+                }
+            } catch (error) {
+                console.error("Failed to load user profile", error);
+            }
+        };
+
         fetchHistory();
+        fetchProfile();
 
         // Listen for the custom event dispatched when a new scan completes
         const handleScanCompleted = () => {
@@ -193,7 +207,7 @@ export default function DashboardSidebar({
         }
     };
 
-    const initial = userName?.charAt(0)?.toUpperCase() || "U";
+    const initial = actualUserName?.charAt(0)?.toUpperCase() || "U";
 
     return (
         <TooltipProvider delayDuration={200}>
@@ -327,7 +341,7 @@ export default function DashboardSidebar({
                                                         <button
                                                             onClick={(e) => handleDownloadReport(scan, e)}
                                                             disabled={isGeneratingMap[scan._id]}
-                                                            className="opacity-0 group-hover:opacity-100 transition-opacity p-1.5 bg-black/10 dark:bg-white/10 rounded-md text-sidebar-foreground/70
+                                                            className="transition-opacity p-1.5 bg-black/10 dark:bg-white/10 rounded-md text-sidebar-foreground/70
                                                             text-primary z-10 shrink-0 disabled:opacity-50"
                                                             title="Download Premium Report"
                                                         >
@@ -344,7 +358,7 @@ export default function DashboardSidebar({
                                                 </TooltipContent>
                                             </Tooltip>
                                         </div>
-                                     );
+                                    );
                                 })}
                             </div>
                         )}
@@ -363,8 +377,8 @@ export default function DashboardSidebar({
                     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
                         {initial}
                     </div>
-                    <div className="flex-1 overflow-hidden">
-                        <p className="truncate text-sm font-semibold">{userName}</p>
+                    <div className="flex-1 overflow-hidden" title={actualUserName}>
+                        <p className="truncate text-sm font-semibold">{actualUserName}</p>
                         <p className="truncate text-xs text-sidebar-foreground/60">
                             Active
                         </p>

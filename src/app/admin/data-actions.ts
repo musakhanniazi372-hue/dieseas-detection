@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import Signup from "@/models/signup.model";
 import Scan from "@/models/scan.model";
 import { revalidatePath } from "next/cache";
+import { requireAdmin } from "./actions";
 
 async function connectDB() {
     if (mongoose.connection.readyState >= 1) {
@@ -14,6 +15,7 @@ async function connectDB() {
 }
 
 export async function getUsers() {
+    await requireAdmin();
     try {
         await connectDB();
         const users = await Signup.find({}).sort({ _id: -1 }).select("-password").lean();
@@ -26,6 +28,7 @@ export async function getUsers() {
 }
 
 export async function deleteUser(id: string) {
+    await requireAdmin();
     try {
         await connectDB();
         await Signup.findByIdAndDelete(id);
@@ -40,6 +43,7 @@ export async function deleteUser(id: string) {
 }
 
 export async function getPredictions() {
+    await requireAdmin();
     try {
         await connectDB();
         // Populate user email if we want to show who made the prediction
@@ -55,6 +59,7 @@ export async function getPredictions() {
 }
 
 export async function deletePrediction(id: string) {
+    await requireAdmin();
     try {
         await connectDB();
         await Scan.findByIdAndDelete(id);
