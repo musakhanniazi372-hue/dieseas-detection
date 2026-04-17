@@ -281,8 +281,8 @@ export default function DashboardPage() {
               disease diagnosis with treatment recommendations.
             </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl">
-              {[
+            {/* <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl"> */}
+              {/* {[
                 {
                   icon: ScanSearch,
                   title: "Upload & Scan",
@@ -316,8 +316,8 @@ export default function DashboardPage() {
                     </CardContent>
                   </Card>
                 );
-              })}
-            </div>
+              })} */}
+            {/* </div> */}
           </div>
         ) : (
           /* ═══════════════ RESULTS STATE ═══════════════ */
