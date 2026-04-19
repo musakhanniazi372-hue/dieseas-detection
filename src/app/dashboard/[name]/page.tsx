@@ -281,29 +281,29 @@ export default function DashboardPage() {
               disease diagnosis with treatment recommendations.
             </p>
 
-            {/* <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl"> */}
-              {/* {[
+            <div className="flex justify-center items-center gap-4 w-full max-w-2xl">
+              {[
                 {
                   icon: ScanSearch,
                   title: "Upload & Scan",
                   desc: "Take a photo or upload an image of your rice leaf",
                 },
-                {
-                  icon: ShieldCheck,
-                  title: "AI Diagnosis",
-                  desc: "Get instant disease detection with confidence scores",
-                },
-                {
-                  icon: Leaf,
-                  title: "Treatment Plan",
-                  desc: "Receive actionable recommendations to save your crop",
-                },
+                // {
+                //   icon: ShieldCheck,
+                //   title: "AI Diagnosis",
+                //   desc: "Get instant disease detection with confidence scores",
+                // },
+                // {
+                //   icon: Leaf,
+                //   title: "Treatment Plan",
+                //   desc: "Receive actionable recommendations to save your crop",
+                // },
               ].map((item) => {
                 const Icon = item.icon;
                 return (
                   <Card
                     key={item.title}
-                    className="text-left hover:bg-muted/40 transition-colors"
+                    className="text-left transition-colors"
                   >
                     <CardContent className="pt-6">
                       <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary mb-3">
@@ -316,8 +316,8 @@ export default function DashboardPage() {
                     </CardContent>
                   </Card>
                 );
-              })} */}
-            {/* </div> */}
+              })}
+            </div>
           </div>
         ) : (
           /* ═══════════════ RESULTS STATE ═══════════════ */
